@@ -49,19 +49,17 @@ class Home extends StatelessWidget {
                             style: 
                             TextStyle(
                               color: Colors.white, 
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w300,
                               fontSize: 14),
                               ),
-                            Padding(
-                              padding: EdgeInsets.only(left:10),
-                              child: Text("Thiwanga", 
+                             Text("Thiwanga", 
                               style:
                               TextStyle(
                                 color: Colors.white, 
-                                fontWeight: FontWeight.w600, 
+                                fontWeight: FontWeight.w500, 
                                 fontSize: 20),
                                 ),
-                            ),
+                            
                           ],
                         ),
                       )
@@ -75,131 +73,134 @@ class Home extends StatelessWidget {
             Positioned(
             top: 155,
             left: 20,
-            child: Container(
-              height: 201,
-              width: 374,
-              decoration: BoxDecoration(
-              color: const Color.fromRGBO(47, 126, 121, 1.0),
-              borderRadius: BorderRadius.circular(20),
+            child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Container(
+                height: 201,
+                width: 374,
+                decoration: BoxDecoration(
+                color: const Color.fromRGBO(47, 126, 121, 1.0),
+                borderRadius: BorderRadius.circular(20),
+                ),
+              
+                child:  const Column(
+                  children: [
+                    
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal:15 ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Total Balance",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              ),                    
+                              Icon( Icons.more_horiz, color: Colors.white, size: 20,)
+                            ],
+                          ),
+              
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("LKR 100,000.00",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              ),
+                              
+                            ],
+                          ),
+              
+                          SizedBox(height: 30),
+              
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                            Row(
+                              children: [
+                                 CircleAvatar(
+                                  radius: 13,
+                                  backgroundColor: Color.fromARGB(255, 85, 145, 141),
+                                  child: Icon(
+                                    Icons.arrow_upward, 
+                                    color: Colors.white,
+                                    size: 19,
+                                  ),
+                                ),
+              
+                                SizedBox(width: 10),
+                                Text("Income",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                ),
+                              ],
+                            ),
+              
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: 13,
+                                  backgroundColor: Color.fromARGB(255, 85, 145, 141),
+                                  child: Icon(
+                                    Icons.arrow_downward, 
+                                    color: Colors.white,
+                                    size: 19,
+                                  ),
+                                ),
+                                SizedBox( width:10),
+                                Text("Expenses",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                ),
+                              ],
+                            ),
+              
+              
+                          ],),
+              
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "LKR.1840.00",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+              
+                              Text(
+                                "LKR.1840.00",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                    
+                  ],
+                )
               ),
-
-              child:  const Column(
-                children: [
-                  
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal:15 ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Total Balance",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            ),                    
-                            Icon( Icons.more_horiz, color: Colors.white, size: 20,)
-                          ],
-                        ),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("LKR 100,000.00",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 30,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            ),
-                            
-                          ],
-                        ),
-
-                        SizedBox(height: 30),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                          Row(
-                            children: [
-                               CircleAvatar(
-                                radius: 13,
-                                backgroundColor: Color.fromARGB(255, 85, 145, 141),
-                                child: Icon(
-                                  Icons.arrow_upward, 
-                                  color: Colors.white,
-                                  size: 19,
-                                ),
-                              ),
-
-                              SizedBox(width: 10),
-                              Text("Income",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              ),
-                            ],
-                          ),
-
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 13,
-                                backgroundColor: Color.fromARGB(255, 85, 145, 141),
-                                child: Icon(
-                                  Icons.arrow_downward, 
-                                  color: Colors.white,
-                                  size: 19,
-                                ),
-                              ),
-                              SizedBox( width:10),
-                              Text("Expenses",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              ),
-                            ],
-                          ),
-
-
-                        ],),
-
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "LKR.1840.00",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-
-                            Text(
-                              "LKR.1840.00",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  )
-                  
-                ],
-              )
             ),
             ),
           ],
