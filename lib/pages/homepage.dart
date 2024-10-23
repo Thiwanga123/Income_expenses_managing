@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+
 class Home extends StatelessWidget {
   const Home({super.key});
 
@@ -8,6 +9,7 @@ class Home extends StatelessWidget {
   Stream<QuerySnapshot> getItems() {
     return FirebaseFirestore.instance.collection('Transaction history').snapshots();
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -33,24 +35,33 @@ class Home extends StatelessWidget {
 
                 final List<DocumentSnapshot> documents = snapshot.data!.docs;
 
-                // Calculate total income from the documents
-                double totalIncome = 0.0;
+                // Calculate total income and expenses from the documents
+                
+                double totalIncome = 0.00;
+                double totalExpense = 0.00;
+                double totalBalance=0.00;
+
                 for (var doc in documents) {
                   var docData = doc.data() as Map<String, dynamic>;
                   String amount = docData['amount'] ?? 'LKR 0';  // Default value as "LKR 0"
                   String type = docData['type'] ?? '';
 
+                  double amountValue = double.tryParse(amount) ?? 0.0;
+
                   if (type == 'income') {
-                    // Remove the "LKR" part and any spaces before parsing
-                    String numericPart = amount.replaceAll("LKR", "").trim();
-                    double amountValue = double.tryParse(numericPart) ?? 0.0;
                     totalIncome += amountValue;
+                  }
+
+                  if (type == 'expense') {
+                    totalExpense += amountValue;
                   }
                 }
 
-                // Pass totalIncome to the _head method
+                totalBalance=totalIncome-totalExpense;
+
+                // Pass totalIncome and totalExpense to the _head method
                 return SliverToBoxAdapter(
-                  child: SizedBox(height: 390, child: _head(totalIncome)),
+                  child: SizedBox(height: 390, child: _head(totalIncome, totalExpense,totalBalance)),
                 );
               },
             ),
@@ -108,6 +119,8 @@ class Home extends StatelessWidget {
                       String amount = docData['amount'].toString() ?? 'No Amount';
                       String type = docData['type'] ?? '';
 
+                      double AmountValue = double.tryParse(amount) ?? 0.0;
+
                       // Determine the color based on the 'type'
                       Color amountColor;
                       if (type == 'income') {
@@ -145,7 +158,7 @@ class Home extends StatelessWidget {
                           ),
                         ),
                         trailing: Text(
-                          '\ $amount',
+                          'LKR.${AmountValue.toStringAsFixed(2)}', // Display amount with 2 decimal places
                           style: TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.w600,
@@ -165,8 +178,8 @@ class Home extends StatelessWidget {
     );
   }
 
-  // Updated _head method to accept totalIncome
-  Widget _head(double totalIncome) {
+  // Updated _head method to accept totalIncome and totalExpense
+  Widget _head(double totalIncome,double totalExpense,double totalBalance) {
     return Stack(
       children: [
         Column(
@@ -276,12 +289,12 @@ class Home extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const Row(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "LKR 100,000.00",
-                              style: TextStyle(
+                              'LKR.${totalBalance.toStringAsFixed(2)}',
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 30,
                                 fontWeight: FontWeight.w500,
@@ -344,16 +357,16 @@ class Home extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "LKR ${totalIncome.toStringAsFixed(2)}", // Display total income
+                              'LKR.${totalIncome.toStringAsFixed(2)}', // Display total income
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            const Text(
-                              "LKR 60,000.00",
-                              style: TextStyle(
+                            Text(
+                              'LKR.${totalExpense.toStringAsFixed(2)}', // Display total expense
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontWeight: FontWeight.w500,
