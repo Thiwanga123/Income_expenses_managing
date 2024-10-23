@@ -1,9 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
+
+  // Function to get data from Firestore "Transaction history" collection
+  Stream<QuerySnapshot> getItems() {
+    return FirebaseFirestore.instance.collection('Transaction history').snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,36 +15,158 @@ class Home extends StatelessWidget {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            SliverToBoxAdapter(
-              child:SizedBox(height: 390,child: _head()),
+            // StreamBuilder to handle the data and pass totalIncome
+            StreamBuilder<QuerySnapshot>(
+              stream: getItems(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return SliverToBoxAdapter(
+                    child: Center(child: Text('Error: ${snapshot.error}')),
+                  );
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+
+                final List<DocumentSnapshot> documents = snapshot.data!.docs;
+
+                // Calculate total income from the documents
+                double totalIncome = 0.0;
+                for (var doc in documents) {
+                  var docData = doc.data() as Map<String, dynamic>;
+                  String amount = docData['amount'] ?? 'LKR 0';  // Default value as "LKR 0"
+                  String type = docData['type'] ?? '';
+
+                  if (type == 'income') {
+                    // Remove the "LKR" part and any spaces before parsing
+                    String numericPart = amount.replaceAll("LKR", "").trim();
+                    double amountValue = double.tryParse(numericPart) ?? 0.0;
+                    totalIncome += amountValue;
+                  }
+                }
+
+                // Pass totalIncome to the _head method
+                return SliverToBoxAdapter(
+                  child: SizedBox(height: 390, child: _head(totalIncome)),
+                );
+              },
             ),
-            SliverToBoxAdapter(child:
-             Padding(
-               padding: const EdgeInsets.symmetric(horizontal: 15),
-               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Transaction History", style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                  ),),
-               
-                  Text("see all", style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w300,
-                  ),),
-                ],
-                           ),
-             ),)
+
+            const SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Transaction History",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      "See All",
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: getItems(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return SliverToBoxAdapter(
+                    child: Center(child: Text('Error: ${snapshot.error}')),
+                  );
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                }
+
+                final List<DocumentSnapshot> documents = snapshot.data!.docs;
+
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      var docData = documents[index].data() as Map<String, dynamic>;
+                      String image = docData['image'] ?? '';
+                      String title = docData['title'] ?? 'No Title';
+                      String subtitle = docData['subtitle'] ?? 'No Subtitle';
+                      String amount = docData['amount'].toString() ?? 'No Amount';
+                      String type = docData['type'] ?? '';
+
+                      // Determine the color based on the 'type'
+                      Color amountColor;
+                      if (type == 'income') {
+                        amountColor = Colors.green;
+                      } else if (type == 'expense') {
+                        amountColor = Colors.red;
+                      } else {
+                        amountColor = Colors.black;
+                      }
+
+                      return ListTile(
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(5),
+                          child: Image.network(
+                            image,
+                            height: 50,
+                            width: 50,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Icon(Icons.error);
+                            },
+                          ),
+                        ),
+                        title: Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        subtitle: Text(
+                          subtitle,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        trailing: Text(
+                          '\ $amount',
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            color: amountColor,
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: documents.length,
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _head() {
+  // Updated _head method to accept totalIncome
+  Widget _head(double totalIncome) {
     return Stack(
       children: [
         Column(
@@ -118,18 +244,18 @@ class Home extends StatelessWidget {
                     offset: Offset(0, 6),
                     blurRadius: 12,
                     spreadRadius: 6,
-                  )
+                  ),
                 ],
                 color: const Color.fromRGBO(47, 126, 121, 1.0),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Column(
+              child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       children: [
-                        Padding(
+                        const Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -150,7 +276,7 @@ class Home extends StatelessWidget {
                             ],
                           ),
                         ),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
@@ -163,16 +289,15 @@ class Home extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 30),
-                        Row(
+                        const SizedBox(height: 30),
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               children: [
                                 CircleAvatar(
                                   radius: 13,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 85, 145, 141),
+                                  backgroundColor: Color.fromARGB(255, 85, 145, 141),
                                   child: Icon(
                                     Icons.arrow_upward,
                                     color: Colors.white,
@@ -194,8 +319,7 @@ class Home extends StatelessWidget {
                               children: [
                                 CircleAvatar(
                                   radius: 13,
-                                  backgroundColor:
-                                      Color.fromARGB(255, 85, 145, 141),
+                                  backgroundColor: Color.fromARGB(255, 85, 145, 141),
                                   child: Icon(
                                     Icons.arrow_downward,
                                     color: Colors.white,
@@ -215,24 +339,24 @@ class Home extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 20),
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "LKR.1840.00",
-                              style: TextStyle(
+                              "LKR ${totalIncome.toStringAsFixed(2)}", // Display total income
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(
-                              "LKR.1840.00",
+                            const Text(
+                              "LKR 60,000.00",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ],
