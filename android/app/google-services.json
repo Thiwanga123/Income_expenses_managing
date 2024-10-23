@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "650271004319",
+    "project_id": "income-expenses-managing",
+    "storage_bucket": "income-expenses-managing.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650271004319:android:3b88bcd0abf742fe2f74aa",
+        "android_client_info": {
+          "package_name": "com.example.income_expenses_managing"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCv4kppH8DnN6yG5clZTh0_bk9E85dmj4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

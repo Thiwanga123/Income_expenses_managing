@@ -12,8 +12,28 @@ class Home extends StatelessWidget {
         child: CustomScrollView(
           slivers: [
             SliverToBoxAdapter(
-              child: _head(),
-            )
+              child:SizedBox(height: 390,child: _head()),
+            ),
+            SliverToBoxAdapter(child:
+             Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 15),
+               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("Transaction History", style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                  ),),
+               
+                  Text("see all", style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w300,
+                  ),),
+                ],
+                           ),
+             ),)
           ],
         ),
       ),
@@ -85,9 +105,9 @@ class Home extends StatelessWidget {
         ),
         Positioned(
           top: 155,
-          left: 20,
+          left: 10,
           child: Padding(
-            padding: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Container(
               height: 201,
               width: 374,
