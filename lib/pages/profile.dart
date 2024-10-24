@@ -26,7 +26,7 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 40),
             CircleAvatar(
               radius: 70,
-             backgroundImage: AssetImage('assets/IMG_7295.JPG'),
+              backgroundImage: AssetImage('assets/profile.JPG'),
             ),
             const SizedBox(height: 40),
             itemProfile('Name', 'Thiwanga Jayasinghe', CupertinoIcons.person),
