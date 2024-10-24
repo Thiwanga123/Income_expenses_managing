@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:income_expenses_managing/pages/add_expenses.dart';
 import 'package:income_expenses_managing/pages/homepage.dart';
 
 
@@ -18,7 +19,10 @@ class _BottomState extends State<Bottom> {
     return Scaffold(
       body: Screen[index_color],
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).
+          push(MaterialPageRoute(builder: (context)=>AddExpenses()));
+        },
         child:Icon(Icons.add),
         backgroundColor: const Color(0xff368983),
       ),
