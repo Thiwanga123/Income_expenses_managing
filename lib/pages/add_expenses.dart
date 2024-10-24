@@ -67,6 +67,8 @@ class _AddExpensesState extends State<AddExpenses> {
     );
   }
 
+
+
   Container mainContainer() {
     return Container(
       decoration: BoxDecoration(
@@ -151,7 +153,7 @@ class _AddExpensesState extends State<AddExpenses> {
                     selectedType = value;
                   });
                 },
-                items: ['Income', 'Expense'].map((type) {
+                items: ['income', 'expense'].map((type) {
                   return DropdownMenuItem<String>(
                     value: type,
                     child: Padding(
@@ -241,10 +243,78 @@ class _AddExpensesState extends State<AddExpenses> {
               ),
             ),
           ),
+        SizedBox(height: 40),
+        save(),
         ],
       ),
     );
   }
+
+GestureDetector save() {
+  return GestureDetector(
+    onTap: () async {
+      // Check if all required fields are filled
+      if (selectedItem != null && selectedType != null && amountController.text.isNotEmpty && selectedDate != null) {
+        try {
+           // Convert the selected date to a string in 'YYYY-MM-DD' format
+          String formattedDate = selectedDate!.toLocal().toString().split(' ')[0];
+
+          // Save the data to Firestore
+          await FirebaseFirestore.instance.collection('Transaction history').add({
+            'title': selectedItem,                // Selected reason item
+            'type': selectedType,                // Income or Expense
+            'amount': amountController.text,     // Entered amount (as a string)
+            'subtitle': formattedDate,
+            'image': _documents.firstWhere((doc) => (doc.data() as Map<String, dynamic>)['name'] == selectedItem)['image'],
+                      // Selected date
+          });
+
+          // Clear the form or provide success feedback
+          setState(() {
+            selectedItem = null;
+            selectedType = null;
+            amountController.clear();
+            selectedDate = null;
+          });
+
+          // You can also show a success message (Snackbar or Dialog)
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Transaction saved successfully!')),
+          );
+        } catch (e) {
+          // Handle error
+          print('Error saving transaction: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error saving transaction')),
+          );
+        }
+      } else {
+        // Show an error message if fields are not filled
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please fill all the fields')),
+        );
+      }
+    },
+    child: Container(
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Color(0xff368983),
+      ),
+      width: 120,
+      height: 50,
+      child: const Text(
+        'Save',
+        style: TextStyle(
+          fontFamily: 'f',
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+          fontSize: 17,
+        ),
+      ),
+    ),
+  );
+}
 
   Column backgroundContainer(BuildContext context) {
     return Column(
