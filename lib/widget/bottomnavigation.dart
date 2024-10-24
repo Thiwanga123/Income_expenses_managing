@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:income_expenses_managing/pages/add_expenses.dart';
 import 'package:income_expenses_managing/pages/homepage.dart';
+import 'package:income_expenses_managing/pages/profile.dart';
 import 'package:income_expenses_managing/pages/statistic.dart';
 
 
@@ -13,7 +14,7 @@ State<Bottom> createState() => _BottomState();
 
 class _BottomState extends State<Bottom> {
    int index_color = 0;
-   List Screen=[Home(),Statistics(),Home(),Home()];
+   List Screen=[Home(),Statistics(),Home(),ProfileScreen()];
 
   @override
   Widget build(BuildContext context) {

@@ -23,7 +23,7 @@ class Add_data {
       name: data['name'] ?? '',
       subtitle: data['subtitle'] ?? '',
       amount: data['amount'] ?? '0', // Default value if not found
-      IN: data['IN'] ?? 'Expense', // Default value if not found
+      IN: data['income'] ?? 'Expense', // Default value if not found
       datetime: DateTime.parse(data['subtitle']), // Assuming subtitle is a date string
     );
   }
