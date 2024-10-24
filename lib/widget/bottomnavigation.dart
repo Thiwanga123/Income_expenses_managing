@@ -21,7 +21,7 @@ class _BottomState extends State<Bottom> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).
-          push(MaterialPageRoute(builder: (context)=>AddExpenses()));
+          push(MaterialPageRoute(builder: (context)=>const AddExpenses()));
         },
         child:Icon(Icons.add),
         backgroundColor: const Color(0xff368983),
