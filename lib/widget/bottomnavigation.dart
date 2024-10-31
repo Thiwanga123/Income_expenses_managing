@@ -14,7 +14,7 @@ State<Bottom> createState() => _BottomState();
 
 class _BottomState extends State<Bottom> {
    int index_color = 0;
-   List Screen=[Home(),Statistics(),Home(),ProfileScreen()];
+   List Screen=[Home(),StatisticsExpense(),Home(),ProfileScreen()];
 
   @override
   Widget build(BuildContext context) {
