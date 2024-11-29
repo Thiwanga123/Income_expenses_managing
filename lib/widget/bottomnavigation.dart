@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:income_expenses_managing/pages/add_expenses.dart';
 import 'package:income_expenses_managing/pages/homepage.dart';
+import 'package:income_expenses_managing/pages/profile.dart';
+import 'package:income_expenses_managing/pages/statistic.dart';
 
 
 class Bottom extends StatefulWidget {
@@ -12,7 +14,7 @@ State<Bottom> createState() => _BottomState();
 
 class _BottomState extends State<Bottom> {
    int index_color = 0;
-   List Screen=[Home(),Home(),Home(),Home()];
+   List Screen=[Home(),StatisticsExpense(),Home(),ProfileScreen()];
 
   @override
   Widget build(BuildContext context) {
